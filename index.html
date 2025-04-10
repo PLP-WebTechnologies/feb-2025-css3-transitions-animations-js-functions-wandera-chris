@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Transitions, Animations & Local Storage</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+
+        .animated-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth transition on hover */
+        }
+
+        .animated-button:hover {
+            background-color: #0056b3;
+        }
+
+        .pulsate {
+            animation: pulse 1s infinite alternate; /* Apply the pulse animation */
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.1);
+                opacity: 0.7;
+            }
+        }
+
+        .fading-image {
+            width: 200px;
+            height: auto;
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out; /* Smooth fade transition */
+        }
+
+        .fading-image.fade-out {
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <h1>CSS Transitions, Animations & Local Storage</h1>
+
+    <button class="animated-button" id="animateButton">Animate Me</button>
+
+    <img id="fadingImage" class="fading-image" src="https://via.placeholder.com/200" alt="Placeholder Image">
+    <button id="fadeButton">Fade Image</button>
+
+    <div>
+        <h2>User Preferences</h2>
+        <label for="username">Username:</label>
+        <input type="text" id="username" placeholder="Enter username">
+        <button id="savePreference">Save Preference</button>
+        <p id="savedUsername"></p>
+    </div>
+
+    <script>
+        const animateButton = document.getElementById('animateButton');
+        const fadingImage = document.getElementById('fadingImage');
+        const fadeButton = document.getElementById('fadeButton');
+        const usernameInput = document.getElementById('username');
+        const savePreferenceButton = document.getElementById('savePreference');
+        const savedUsernameDisplay = document.getElementById('savedUsername');
+
+        // Function to store and retrieve user preferences using localStorage
+        function managePreferences() {
+            const USERNAME_KEY = 'userUsername';
+
+            // Retrieve username from localStorage on page load
+            const storedUsername = localStorage.getItem(USERNAME_KEY);
+            if (storedUsername) {
+                usernameInput.value = storedUsername;
+                savedUsernameDisplay.textContent = `Saved Username: ${storedUsername}`;
+            }
+
+            // Save username to localStorage
+            savePreferenceButton.addEventListener('click', () => {
+                const currentUsername = usernameInput.value;
+                localStorage.setItem(USERNAME_KEY, currentUsername);
+                savedUsernameDisplay.textContent = `Saved Username: ${currentUsername}`;
+            });
+        }
+
+        // Function to implement an animation triggered by user action
+        function triggerAnimation() {
+            animateButton.addEventListener('click', () => {
+                animateButton.classList.add('pulsate');
+                // Remove the class after the animation duration to allow re-triggering
+                setTimeout(() => {
+                    animateButton.classList.remove('pulsate');
+                }, 1000); // Matches the animation duration
+            });
+        }
+
+        // Function to trigger a CSS transition
+        function triggerTransition() {
+            fadeButton.addEventListener('click', () => {
+                fadingImage.classList.toggle('fade-out');
+            });
+        }
+
+        // Initialize the functions
+        managePreferences();
+        triggerAnimation();
+        triggerTransition();
+    </script>
+</body>
+</html>
